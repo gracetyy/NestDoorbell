@@ -1,0 +1,170 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>NestSpace login page by Grace</title>
+    <link rel="stylesheet" href="./css.css">
+
+</head>
+
+<body>
+    <img src="logowhite.png" alt="NestSpace Logo"
+        style="position: absolute; top: 20px; left: 20px; width: 20%; height: auto;">
+    <section>
+
+        <div class="login">
+
+            <div class="content">
+
+                <h2>Log In</h2>
+
+                <div class="form">
+
+                    <div class="inputBox">
+
+                        <input type="text" id="username" required> <i>Username:</i>
+
+                    </div>
+
+                    <div class="inputBox">
+
+                        <input type="password" id="password" required> <i>Password:</i>
+
+                    </div>
+
+                    <div class="links"> <a href="#">Register</a>
+
+                    </div>
+
+                    <div class="inputBox">
+
+                        <input type="submit" value="Login">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+    <script>
+        // Function to handle form submission for registration
+        function handleRegistration(event) {
+            event.preventDefault(); // Prevent page reload
+
+            // Get the values from the form
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Create a JSON object with the username and password
+            const data = {
+                "username": username,
+                "password": password
+            };
+
+            // Make a POST request to the registration API
+            fetch('https://nestspace-mini-project-api.vercel.app/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Registration successful:', result);
+                    // Display a success message or perform any other actions
+
+                    // Clear the form inputs
+                    document.getElementById('username').value = '';
+                    document.getElementById('password').value = '';
+                })
+                .catch(error => {
+                    console.error('Registration failed:', error);
+                    // Display an error message or perform any other actions
+                });
+        }
+
+        // Function to handle form submission for login
+        function handleLogin(event) {
+            event.preventDefault(); // Prevent page reload
+
+            // Get the values from the form
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            // Create a JSON object with the username and password
+            const data = {
+                "username": username,
+                "password": password
+            };
+
+            // Make a POST request to the login API
+            fetch('https://nestspace-mini-project-api.vercel.app/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    console.log('Login successful:', result);
+                    // Display a success message or perform any other actions
+
+                    // Clear the form inputs
+                    document.getElementById('loginUsername').value = '';
+                    document.getElementById('loginPassword').value = '';
+
+                    // Display the login message
+                    const loginMessage = document.getElementById('loginMessage');
+                    loginMessage.textContent = 'Login successful!';
+                })
+                .catch(error => {
+                    console.error('Login failed:', error);
+                    // Display an error message or perform any other actions
+                });
+        }
+
+        // Function to fetch and display logs
+        function fetchLogs() {
+            // Make a GET request to the log API
+            fetch('https://nestspace-mini-project-api.vercel.app/logs')
+                .then(response => response.json())
+                .then(logs => {
+                    console.log('Logs:', logs);
+                    // Display the logs in the UI
+                    const logList = document.getElementById('logList');
+                    logList.innerHTML = ''; // Clear previous logs
+
+                    // Convert each log to a string and create list items
+                    logs.forEach(log => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = JSON.stringify(log, null, 2); // Pretty-print the log
+                        logList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Failed to fetch logs:', error);
+                    // Display an error message or perform any other actions
+                });
+        }
+
+        // Attach the form submission handlers
+        const registrationForm = document.getElementById('registrationForm');
+        registrationForm.addEventListener('submit', handleRegistration);
+
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', handleLogin);
+
+        // Fetch and display logs on page load
+        fetchLogs();
+    </script>
+</body>
+
+</html>
